@@ -69,6 +69,7 @@ jspm_packages/
 
 # Serverless directories
 .serverless
+.cursorrules
 
 # FuseBox cache
 .fusebox/
