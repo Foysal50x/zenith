@@ -56,60 +56,28 @@ const envOverrides = {
 
 function generateEnvContent(config) {
   return `# =============================================================================
-# Node.js Fullstack Starter - Environment Variables
+# Zenith Fullstack Starter - Environment Variables
 # Generated on: ${new Date().toISOString()}
+# Author: https://github.com/foysal50x/zenith
 # =============================================================================
-
-# =============================================================================
-# CORE CONFIGURATION
-# =============================================================================
-
 NODE_ENV=${config.NODE_ENV}
 PORT=${config.PORT}
 HOST=${config.HOST}
 
-# =============================================================================
-# DATABASE CONFIGURATION
-# =============================================================================
-
+DB=${config.DB}
 DB_URL=${config.DB_URL}
-
-# =============================================================================
-# REDIS CONFIGURATION
-# =============================================================================
-
 REDIS_URL=${config.REDIS_URL}
-
-# =============================================================================
-# AUTHENTICATION & SECURITY
-# =============================================================================
 
 JWT_SECRET=${config.JWT_SECRET}
 JWT_EXPIRES_IN=${config.JWT_EXPIRES_IN}
 BCRYPT_SALT_ROUNDS=${config.BCRYPT_SALT_ROUNDS}
 
-# =============================================================================
-# RATE LIMITING
-# =============================================================================
-
 RATE_LIMIT_WINDOW_MS=${config.RATE_LIMIT_WINDOW_MS}
 RATE_LIMIT_MAX_REQUESTS=${config.RATE_LIMIT_MAX_REQUESTS}
 
-# =============================================================================
-# LOGGING
-# =============================================================================
-
 LOG_LEVEL=${config.LOG_LEVEL}
 
-# =============================================================================
-# CORS & SECURITY
-# =============================================================================
-
 CORS_ORIGIN=${config.CORS_ORIGIN}
-
-# =============================================================================
-# FRONTEND CONFIGURATION (Vite)
-# =============================================================================
 
 VITE_SERVER_PORT=${config.VITE_SERVER_PORT}
 VITE_SERVER_HOST=${config.VITE_SERVER_HOST}
