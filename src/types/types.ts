@@ -1,0 +1,1 @@
+export type ApplicationStates = 'created' | 'initiated' | 'booted' | 'ready' | 'terminated'
