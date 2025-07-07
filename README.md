@@ -1,5 +1,9 @@
 # 🌟 Zenith: Peak Development Experience
 
+<div align="center">
+  <img src="art/zenith-cover.jpg" alt="Zenith - Peak Development Experience" width="100%" style="border-radius: 10px; margin: 20px 0;"/>
+</div>
+
 A modern, modular, and scalable fullstack project template built with Node.js, React 19, TypeScript, and industry-standard best practices. Reach the zenith of your development workflow.
 
 ## ⚠️ **Development Status Warning**
