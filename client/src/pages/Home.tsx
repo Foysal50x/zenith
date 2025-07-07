@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { motion, useScroll, useTransform, useInView } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Button } from '../components/ui/Button';
 // import { AnimatedBackground } from '../components/AnimatedBackground';
 import { useAuth } from '../contexts/AuthContext';

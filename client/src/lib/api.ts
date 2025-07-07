@@ -8,10 +8,6 @@ interface ApiResponse<T> {
   success: boolean;
 }
 
-interface ApiError {
-  message: string;
-  status: number;
-}
 
 class ApiClient {
   private baseURL: string;
