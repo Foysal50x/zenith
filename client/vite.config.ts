@@ -66,16 +66,17 @@ export default defineConfig(({ mode }) => {
       // },
     },
     build: {
-      outDir: 'dist',
+      outDir: '../public/dist',
       sourcemap: isDevelopment,
       minify: isProduction,
-              rollupOptions: {
-          output: {
-            manualChunks: {
-              vendor: ['react', 'react-dom'],
-            },
+      emptyOutDir: true,
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            vendor: ['react', 'react-dom'],
           },
         },
+      },
     },
     define: {
       __DEV__: isDevelopment,

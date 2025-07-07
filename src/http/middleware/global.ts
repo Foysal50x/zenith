@@ -1,9 +1,11 @@
 import { AppError, isOperationalError } from "#utils/errors.js";
-import { Request, Response, NextFunction } from 'express';
+import express, { Request, Response, NextFunction } from 'express';
+import { createProxyMiddleware } from "http-proxy-middleware";
 import { Application } from "#core/application.js";
+import { fileURLToPath } from 'node:url';
+import path from 'node:path';
 import helmet from 'helmet';
 import cors from 'cors';
-import { createProxyMiddleware } from "http-proxy-middleware";
 
 export function createHelmetMiddleware(app: Application) {
     const viteDevServer = `${app.env.VITE_SERVER_HOST}:${app.env.VITE_SERVER_PORT}`;
@@ -101,14 +103,16 @@ export function createViteProxyMiddleware(app: Application) {
         ws: true, // Enable WebSocket proxying for HMR
     });
 
-    // Apply proxy to all routes except API and events
+    // apply proxy to all routes except API, events and health for development environment only
     return (req: Request, res: Response, next: NextFunction) => {
-        if(app.inProduction) {
-            return next();
+        
+        if (app.inProduction) {
+            const currentDir = path.dirname(fileURLToPath(import.meta.url));
+            return express.static(path.join(currentDir, '../../../public/dist'))(req, res, next);
         }
 
         // Skip proxy for API routes and SSE events
-        if (req.path.startsWith('/api') || req.path.startsWith('/events')) {
+        if (req.path.startsWith('/api') || req.path.startsWith('/events') || req.path.startsWith('/health')) {
             return next();
         }
 

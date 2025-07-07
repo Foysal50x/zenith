@@ -7,6 +7,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { SparklesText } from "../components/magicui/sparkles-text";
 import { FlickeringGrid } from "../components/magicui/flickering-grid";
 import { FeatureCard } from '../components/FeatureCard';
+import { StatCard } from '../components/StatCard';
 
 import { 
   ArrowRight, 
@@ -165,37 +166,18 @@ export const Home: React.FC = () => {
       {/* Stats Section */}
       <section className="py-20 bg-gradient-to-r from-primary/5 via-background to-primary/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             {getStats().map((stat, index) => (
-              <motion.div 
-                key={index} 
-                className="group"
-                animate={{
-                  y: [0, -6, 0],
-                  transition: {
-                    duration: 2 + index * 0.5,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: index * 0.2
-                  }
-                }}
-              >
-                <motion.div 
-                  className={`w-16 h-16 ${stat.bgColor} rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg group-hover:shadow-xl`}
-                  animate={{
-                    rotate: [0, 5, 0, -5, 0],
-                    transition: {
-                      duration: 4 + index,
-                      repeat: Infinity,
-                      ease: "easeInOut"
-                    }
-                  }}
-                >
-                  <stat.icon className={`w-8 h-8 ${stat.iconColor} group-hover:scale-110 transition-transform duration-300`} />
-                </motion.div>
-                <div className="text-3xl font-bold text-foreground mb-2">{stat.value}</div>
-                <div className="text-muted-foreground">{stat.label}</div>
-              </motion.div>
+              <StatCard
+                key={index}
+                icon={stat.icon}
+                value={stat.value}
+                label={stat.label}
+                bgColor={stat.bgColor}
+                iconColor={stat.iconColor}
+                animationDelay={index * 0.2}
+                index={index}
+              />
             ))}
           </div>
         </div>
