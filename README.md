@@ -2,183 +2,227 @@
 
 A modern, modular, and scalable fullstack project template built with Node.js, React 19, TypeScript, and industry-standard best practices. Reach the zenith of your development workflow.
 
+## ⚠️ **Development Status Warning**
+
+**🚧 This project is currently in active development - Early Release 🚧**
+
+**Please note that this is an early release and many features are still being developed and refined:**
+
+- **Database Integration**: Drizzle ORM setup is in progress, schema migrations may not be fully functional
+- **Redis Configuration**: Redis client and caching features are being implemented
+- **Authentication System**: API routes under `/api/auth` are not fully implemented and may not work as expected
+- **Backend Services**: Some service integrations are incomplete or under development
+- **Error Handling**: Error management system is being refined
+- **Testing Suite**: Test coverage is being expanded
+
+**Timeline**: I am actively working on completing all pending features and fixing remaining issues. **By the end of this week**, I expect all major features to be working perfectly and the project to be production-ready.
+
+**Current Status**: 
+- ✅ Project structure and architecture
+- ✅ Frontend components and UI system
+- ✅ Build configuration and deployment setup
+- ✅ Development environment setup
+- 🚧 Backend API implementation (in progress)
+- 🚧 Database and Redis integration (in progress)
+- 🚧 Authentication flow (in progress)
+
+**For Contributors**: If you encounter issues or want to contribute, please check the [Issues](https://github.com/your-repo/issues) section or create new issues. Your feedback is valuable for improving this template.
+
+---
+
 ## 🚀 Features
 
-### Backend
-- **Node.js + Express.js** - Fast, unopinionated web framework
-- **TypeScript** - Full type safety with strict mode
+### 🔥 **Backend Architecture**
+- **Node.js + Express.js** - High-performance server with modular architecture
+- **TypeScript** - Strict type safety with subpath imports (`#core/*`, `#config/*`)
 - **Drizzle ORM** - Type-safe database queries with PostgreSQL
-- **Redis** - Caching, session management, and rate limiting
-- **JWT Authentication** - Secure token-based authentication
-- **Rate Limiting** - Scalable rate limiting with Redis backend
-- **Zod Validation** - Runtime schema validation
-- **Helmet** - Security headers and best practices
+- **Redis Integration** - Caching, session management, and rate limiting
+- **JWT Authentication** - Secure token-based authentication system
+- **Advanced Rate Limiting** - Redis-backed, customizable rate limiting
+- **Zod Validation** - Runtime schema validation for all inputs
+- **Helmet Security** - Comprehensive security headers and CSP
 - **Winston Logging** - Structured logging with multiple transports
-- **Graceful Shutdown** - Proper cleanup on process termination
+- **Graceful Shutdown** - Proper cleanup and connection management
+- **Application Lifecycle** - Event-driven application management with hooks
 
-### Frontend
+### 🎨 **Frontend Excellence**
 - **React 19** - Latest React with server components support
 - **TypeScript** - Full type safety throughout the frontend
-- **Tailwind CSS v4** - Utility-first CSS framework
-- **Vite** - Lightning-fast build tool and dev server
-- **React Router** - Declarative routing for React
+- **Tailwind CSS v4** - Modern utility-first CSS framework
+- **Vite** - Lightning-fast build tool with HMR
+- **Framer Motion** - Smooth animations and micro-interactions
+- **React Router** - Declarative client-side routing
 - **Zustand** - Lightweight state management
-- **React Hook Form** - Performant forms with validation
 - **React Query** - Powerful data fetching and caching
-- **Lucide React** - Beautiful icons
+- **Lucide React** - Beautiful, customizable icons
+- **Responsive Design** - Mobile-first, adaptive UI components
 
-### Architecture
-- **Modular Design** - Separation of concerns with clear boundaries
-- **Error Handling** - Centralized error handling with custom error types
+### 🧩 **Reusable Component System**
+- **FeatureCard** - Animated feature cards with 6 color themes
+- **StatCard** - Animated statistics display components
+- **Button** - Versatile button component with multiple variants
+- **Layout** - Responsive navigation and layout structure
+- **ProtectedRoute** - Authentication-aware route protection
+- **MagicUI Components** - Advanced UI elements (SparklesText, FlickeringGrid)
+
+### 🏗️ **Enterprise Architecture**
+- **Modular Design** - Clear separation of concerns with domain-driven structure
+- **Error Handling** - Centralized error management with custom error types
 - **Middleware Stack** - Comprehensive middleware for security and validation
-- **Event-Driven** - Application lifecycle managed with events
-- **Guard Clauses** - Early returns and defensive programming
-- **Environment Config** - Type-safe configuration management
+- **Event-Driven** - Application lifecycle managed with hooks and events
+- **Guard Clauses** - Early returns and defensive programming patterns
+- **Configuration Management** - Type-safe, environment-aware configuration
+- **Connection Management** - Optimized HTTP connection handling
+- **Memory Monitoring** - Built-in memory usage tracking and warnings
 
 ## 📁 Project Structure
 
 ```
 zenith/
 ├── src/                          # Backend source code
-│   ├── application/              # Application lifecycle & services
-│   │   └── application.ts        # Central application class
-│   ├── config/                   # Configuration files
+│   ├── core/                     # Core application classes
+│   │   ├── application.ts        # Central application with lifecycle hooks
+│   │   └── http-server-process.ts # HTTP server process manager
+│   ├── config/                   # Configuration management
 │   │   ├── env.ts               # Environment variables (Zod validated)
 │   │   ├── database.ts          # Database configuration
-│   │   └── redis.ts             # Redis configuration
+│   │   └── redis.ts             # Redis client configuration
 │   ├── db/                      # Database layer
-│   │   └── schema.ts            # Drizzle ORM schema
+│   │   └── schema.ts            # Drizzle ORM schema definitions
 │   ├── http/                    # HTTP layer
-│   │   ├── server/              # Server classes
-│   │   │   ├── http-server.ts   # HTTP server class
-│   │   │   └── http-server-process.ts # Server process manager
+│   │   ├── server/              # Server infrastructure
+│   │   │   └── http-kernal.ts   # HTTP kernel with middleware stack
 │   │   ├── middleware/          # Express middleware
+│   │   │   ├── global.ts        # Global middleware (CORS, Helmet, Vite)
 │   │   │   ├── auth.ts          # Authentication middleware
 │   │   │   ├── rate-limit.ts    # Rate limiting middleware
-│   │   │   └── validate.ts      # Validation middleware
-│   │   ├── routes/              # API routes
+│   │   │   ├── validate.ts      # Zod validation middleware
+│   │   │   └── health-check.ts  # Health check endpoint
+│   │   ├── routes/              # API route definitions
 │   │   │   └── auth.routes.ts   # Authentication routes
 │   │   ├── controllers/         # Route controllers
 │   │   │   └── auth.controller.ts # Authentication controller
-│   │   └── validators/          # Zod schemas
+│   │   └── validators/          # Zod validation schemas
 │   │       └── auth.ts          # Authentication schemas
 │   ├── services/                # Business logic services
 │   │   └── auth.service.ts      # Authentication service
 │   ├── types/                   # TypeScript type definitions
+│   │   └── types.ts             # Shared type definitions
 │   ├── utils/                   # Utility functions
 │   │   ├── errors.ts            # Custom error classes
 │   │   ├── helpers.ts           # Helper functions
-│   │   └── logger.ts            # Winston logger
+│   │   └── logger.ts            # Winston logger configuration
 │   └── main.ts                  # Application entry point
 ├── client/                      # React frontend
 │   ├── src/
-│   │   ├── components/          # React components
-│   │   │   └── Layout.tsx       # Layout component
+│   │   ├── components/          # Reusable React components
+│   │   │   ├── ui/              # Base UI components
+│   │   │   │   └── Button.tsx   # Versatile button component
+│   │   │   ├── magicui/         # Advanced UI components
+│   │   │   │   ├── sparkles-text.tsx    # Animated sparkles text
+│   │   │   │   └── flickering-grid.tsx  # Animated background grid
+│   │   │   ├── FeatureCard.tsx  # Animated feature display cards
+│   │   │   ├── StatCard.tsx     # Animated statistics cards
+│   │   │   ├── Layout.tsx       # Main layout component
+│   │   │   └── ProtectedRoute.tsx # Route protection
 │   │   ├── contexts/            # React contexts
 │   │   │   └── AuthContext.tsx  # Authentication context
-│   │   ├── hooks/               # Custom hooks
+│   │   ├── hooks/               # Custom React hooks
 │   │   ├── pages/               # Page components
-│   │   ├── services/            # API services
-│   │   │   └── auth.ts          # Authentication service
-│   │   ├── types/               # TypeScript types
-│   │   │   └── auth.ts          # Authentication types
-│   │   ├── utils/               # Utility functions
+│   │   │   └── Home.tsx         # Landing page with reusable components
+│   │   ├── services/            # API communication services
+│   │   ├── types/               # Frontend TypeScript types
+│   │   ├── utils/               # Frontend utility functions
 │   │   ├── App.tsx              # Main App component
 │   │   ├── main.tsx             # React entry point
-│   │   └── index.css            # Global styles
+│   │   └── index.css            # Global styles with Tailwind
 │   ├── package.json             # Frontend dependencies
-│   └── vite.config.ts           # Vite configuration
-├── tests/                       # Test files
+│   ├── vite.config.ts           # Dynamic Vite configuration
+│   └── index.html               # HTML template
+├── public/                      # Static assets and build output
+│   └── dist/                    # Frontend build output (production)
+├── scripts/                     # Utility scripts
+│   └── setup-env.js             # Dynamic environment setup
 ├── .env.example                 # Environment variables template
 ├── drizzle.config.ts            # Drizzle Kit configuration
 ├── tailwind.config.js           # Tailwind CSS configuration
 ├── tsconfig.json                # TypeScript configuration
-├── package.json                 # Backend dependencies
+├── package.json                 # Backend dependencies and scripts
 └── README.md                    # This file
 ```
 
 ## 🛠️ Prerequisites
 
-- **Node.js** (v18 or higher)
+- **Node.js** (v20 or higher)
 - **PostgreSQL** (v14 or higher)
 - **Redis** (v6 or higher)
 - **npm** or **yarn**
 
 ## ⚡ Quick Start
 
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd zenith
-   ```
+### 1. **Clone and Install**
+```bash
+git clone <repository-url>
+cd zenith
+npm install
+```
 
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
+### 2. **Environment Setup**
+```bash
+# Quick setup with defaults
+npm run setup:env:dev
 
-3. **Setup environment variables**
-   ```bash
-   cp .env.example .env
-   # Edit .env with your configuration
-   ```
+# Or copy and customize manually
+cp .env.example .env
+# Edit .env with your configuration
+```
 
-4. **Setup database**
-   ```bash
-   # Create PostgreSQL database
-   createdb zenith_db
-   
-   # Run migrations
-   npm run migrate
-   ```
+### 3. **Database Setup**
+```bash
+# Create PostgreSQL database
+createdb zenith_db
 
-5. **Start Redis**
-   ```bash
-   redis-server
-   ```
+# Run migrations
+npm run migrate
+```
 
-6. **Start the application**
-   ```bash
-   npm run dev
-   ```
+### 4. **Start Services**
+```bash
+# Start Redis
+redis-server
+
+# Start development servers (backend + frontend)
+npm run dev
+```
 
 The application will be available at:
-- **Backend**: http://localhost:3001
-- **Frontend**: http://localhost:3000
+- **Frontend**: http://localhost:5173 (Vite dev server)
+- **Backend API**: http://localhost:8080 (Express server)
+- **Health Check**: http://localhost:8080/health
 
 ## 🔧 Configuration
 
-### Dynamic Environment Setup
+### **Dynamic Environment Setup**
 
-The project includes a dynamic environment configuration system that automatically adapts to different environments (development, production, test).
-
-#### Quick Environment Setup
+Zenith includes an intelligent environment configuration system that adapts to different deployment scenarios:
 
 ```bash
-# Setup development environment (default)
-npm run setup:env:dev
-
-# Setup production environment
-npm run setup:env:prod
-
-# Setup test environment
-npm run setup:env:test
-
-# Or manually specify environment
-npm run setup:env development
+# Environment-specific setup
+npm run setup:env:dev     # Development with debug logging
+npm run setup:env:prod    # Production with optimizations
+npm run setup:env:test    # Testing with minimal logging
 ```
 
-#### Environment Variables
-
-The configuration system supports the following environment variables:
+### **Environment Variables**
 
 **Core Configuration:**
 ```env
 NODE_ENV=development
-PORT=3000
+PORT=8080
+HOST=0.0.0.0
 ```
 
-**Database & Redis:**
+**Database & Caching:**
 ```env
 DB_URL=postgresql://username:password@localhost:5432/zenith_db
 REDIS_URL=redis://localhost:6379
@@ -197,43 +241,71 @@ RATE_LIMIT_WINDOW_MS=60000
 RATE_LIMIT_MAX_REQUESTS=100
 ```
 
-**Frontend Configuration (Vite):**
+**Frontend Configuration:**
 ```env
-VITE_SERVER_PORT=3001
+VITE_SERVER_PORT=5173
 VITE_SERVER_HOST=localhost
 VITE_SERVER_SSL=false
+CORS_ORIGIN=http://localhost:5173
 ```
 
-**Backend API Configuration (for frontend proxy):**
-```env
-BACKEND_PORT=3000
-BACKEND_HOST=localhost
-BACKEND_PROTOCOL=http
+### **Vite Dynamic Configuration**
+
+The frontend automatically adapts to environment variables:
+- **Development**: Proxy to backend API, HMR enabled
+- **Production**: Serve static files, optimized builds
+- **SSL Support**: Automatic HTTPS configuration
+- **Environment Detection**: Automatic port and host configuration
+
+## 🏗️ **Build & Deployment**
+
+### **Development Workflow**
+```bash
+npm run dev              # Start both backend and frontend
+npm run dev:server       # Backend only (API development)
+npm run dev:client       # Frontend only (UI development)
 ```
 
-#### Environment-Specific Overrides
+### **Production Build**
+```bash
+npm run build           # Build both backend and frontend
+npm run build:server    # TypeScript compilation
+npm run build:client    # Vite production build → public/dist/
+```
 
-The system automatically applies different configurations based on the environment:
+### **Production Deployment**
+```bash
+npm run start:prod      # Start in production mode
+npm run preview         # Build and test production locally
+```
 
-- **Development**: Debug logging, localhost URLs, port 3000/3001
-- **Production**: Info logging, HTTPS enabled, port 8080/443
-- **Test**: Error-only logging, test ports, minimal configuration
+### **Build Output Structure**
+- **Backend**: `dist/` - Compiled TypeScript
+- **Frontend**: `public/dist/` - Vite production build
+- **Static Serving**: Automatic in production mode
 
-#### Vite Dynamic Configuration
+### **Docker Deployment**
+```dockerfile
+FROM node:18-alpine
+WORKDIR /app
 
-The frontend Vite configuration automatically adapts to environment variables:
+# Install dependencies
+COPY package*.json ./
+RUN npm ci --only=production
 
-- Reads backend API URL from environment
-- Configures proxy settings dynamically
-- Supports SSL certificates for HTTPS
-- Provides detailed logging for debugging
-- Optimizes build settings per environment
+# Copy built application
+COPY dist ./dist
+COPY public/dist ./public/dist
+
+EXPOSE 8080
+CMD ["npm", "start"]
+```
 
 ## 📚 API Documentation
 
-### Authentication Endpoints
+### **Authentication Endpoints**
 
-#### Register User
+#### **Register User**
 ```http
 POST /api/auth/register
 Content-Type: application/json
@@ -245,7 +317,7 @@ Content-Type: application/json
 }
 ```
 
-#### Login User
+#### **Login User**
 ```http
 POST /api/auth/login
 Content-Type: application/json
@@ -256,13 +328,13 @@ Content-Type: application/json
 }
 ```
 
-#### Get Profile
+#### **Get Profile**
 ```http
 GET /api/auth/profile
 Authorization: Bearer <access_token>
 ```
 
-#### Update Profile
+#### **Update Profile**
 ```http
 PUT /api/auth/profile
 Authorization: Bearer <access_token>
@@ -274,7 +346,7 @@ Content-Type: application/json
 }
 ```
 
-#### Change Password
+#### **Change Password**
 ```http
 POST /api/auth/change-password
 Authorization: Bearer <access_token>
@@ -286,7 +358,7 @@ Content-Type: application/json
 }
 ```
 
-#### Refresh Token
+#### **Refresh Token**
 ```http
 POST /api/auth/refresh
 Content-Type: application/json
@@ -296,28 +368,15 @@ Content-Type: application/json
 }
 ```
 
-#### Logout
+#### **Logout**
 ```http
 POST /api/auth/logout
 Authorization: Bearer <access_token>
 ```
 
-## 🧪 Testing
+### **System Endpoints**
 
-```bash
-# Run all tests
-npm test
-
-# Run tests in watch mode
-npm run test:watch
-
-# Run tests with coverage
-npm run test:coverage
-```
-
-## 📈 Monitoring
-
-### Health Check
+#### **Health Check**
 ```http
 GET /health
 ```
@@ -332,132 +391,217 @@ Returns:
 }
 ```
 
-### Logging
+## 🧩 **Component Library**
 
-The application uses Winston for structured logging:
+### **FeatureCard**
+Animated cards for showcasing features with multiple color themes:
 
-- **Console**: Development logging with colors
-- **File**: Production logging to files
-- **Levels**: error, warn, info, debug
+```tsx
+<FeatureCard
+  title="🎨 Modern Frontend"
+  icon={Code}
+  theme="purple"
+  animationDelay={0.5}
+  features={[
+    { text: "React 19 with TypeScript", iconColor: "purple" },
+    { text: "Tailwind CSS v4", iconColor: "pink" },
+    { text: "Vite for fast builds", iconColor: "rose" },
+    { text: "React Query for data fetching", iconColor: "fuchsia" }
+  ]}
+/>
+```
+
+**Available Themes**: `purple`, `blue`, `emerald`, `orange`, `pink`, `teal`
+
+### **StatCard**
+Animated statistics display with rotating icons:
+
+```tsx
+<StatCard
+  icon={Star}
+  value="100%"
+  label="Type Safe"
+  bgColor="bg-gradient-to-br from-yellow-100 to-amber-100"
+  iconColor="text-yellow-500"
+  index={0}
+/>
+```
+
+### **Button Component**
+Versatile button with multiple variants and sizes:
+
+```tsx
+<Button variant="default" size="lg">
+  Get Started
+</Button>
+```
+
+**Variants**: `default`, `destructive`, `outline`, `secondary`, `ghost`, `link`
+**Sizes**: `default`, `sm`, `lg`, `icon`
+
+## 🧪 Testing
+
+```bash
+# Run all tests
+npm test
+
+# Run tests in watch mode
+npm run test:watch
+
+# Run tests with coverage
+npm run test:coverage
+
+# Type checking
+npm run typecheck
+```
+
+## 📈 Monitoring & Observability
+
+### **Built-in Monitoring**
+- **Memory Usage Tracking** - Automatic memory monitoring with warnings
+- **Connection Monitoring** - Active connection tracking and limits
+- **Performance Metrics** - Request timing and throughput monitoring
+- **Error Tracking** - Structured error logging with context
+
+### **Logging Levels**
+- **Development**: Debug level with detailed request logging
+- **Production**: Info level with structured JSON logging
+- **Test**: Error level only for clean test output
+
+### **Health Monitoring**
+```bash
+curl http://localhost:8080/health
+```
 
 ## 🔒 Security Features
 
-- **CORS** - Configurable cross-origin resource sharing
-- **Helmet** - Security headers and CSP
-- **Rate Limiting** - Redis-backed rate limiting
-- **JWT Authentication** - Secure token-based auth
-- **Input Validation** - Zod schema validation
-- **Password Hashing** - bcrypt with configurable rounds
-- **SQL Injection Prevention** - Drizzle ORM query builder
+- **Helmet Integration** - Comprehensive security headers and CSP
+- **CORS Configuration** - Configurable cross-origin resource sharing
+- **Rate Limiting** - Redis-backed, adaptive rate limiting
+- **JWT Authentication** - Secure token-based authentication
+- **Input Validation** - Zod schema validation for all inputs
+- **Password Security** - bcrypt hashing with configurable rounds
+- **SQL Injection Prevention** - Drizzle ORM with parameterized queries
+- **XSS Protection** - Content Security Policy and input sanitization
 
-## 🚀 Deployment
+## 🛠️ **Development Tools**
 
-### Production Build
-
-```bash
-# Build backend
-npm run build
-
-# Build frontend
-npm run build:client
-
-# Start production server
-npm start
-```
-
-### Docker Deployment
-
-```dockerfile
-# Example Dockerfile
-FROM node:18-alpine
-
-WORKDIR /app
-COPY package*.json ./
-RUN npm ci --only=production
-
-COPY dist ./dist
-COPY client/dist ./client/dist
-
-EXPOSE 3001
-CMD ["node", "dist/main.js"]
-```
-
-### Environment Variables for Production
-
-```env
-NODE_ENV=production
-PORT=3001
-DB_URL=postgresql://prod_user:prod_password@db:5432/prod_database
-REDIS_URL=redis://redis:6379
-JWT_SECRET=your-production-secret-key
-LOG_LEVEL=warn
-```
-
-## 🛠️ Development
-
-### Available Scripts
-
+### **Available Scripts**
 ```bash
 # Development
-npm run dev              # Start dev server (backend + frontend)
-npm run dev:server       # Start backend only
-npm run dev:client       # Start frontend only
+npm run dev              # Start both servers with hot reload
+npm run dev:server       # Backend development with tsx watch
+npm run dev:client       # Frontend development with Vite HMR
 
 # Building
-npm run build           # Build both backend and frontend
-npm run build:server    # Build backend only
-npm run build:client    # Build frontend only
+npm run build           # Production build (server + client)
+npm run clean           # Clean all build directories
 
-# Testing
-npm test               # Run tests
-npm run test:watch     # Run tests in watch mode
-npm run test:coverage  # Run tests with coverage
+# Production
+npm run start:prod      # Start in production mode
+npm run preview         # Build and test production locally
 
-# Linting
-npm run lint           # Run ESLint
-npm run lint:fix       # Fix ESLint issues
-
-# Type Checking
-npm run typecheck      # Run TypeScript type checking
+# Code Quality
+npm run lint            # ESLint checking
+npm run lint:fix        # Auto-fix ESLint issues
+npm run typecheck       # TypeScript type checking
 
 # Database
-npm run migrate        # Run database migrations
+npm run migrate         # Apply database migrations
 npm run migrate:generate # Generate new migration
-npm run migrate:studio # Open Drizzle Studio
+npm run migrate:studio  # Open Drizzle Studio (GUI)
+
+# Environment
+npm run setup:env:dev   # Setup development environment
+npm run setup:env:prod  # Setup production environment
+npm run setup:env:test  # Setup testing environment
 ```
 
-### Adding New Routes
+### **Adding New Features**
 
-1. **Create a new route file** in `src/http/routes/`
-2. **Add validation schemas** in `src/http/validators/`
-3. **Create controller** in `src/http/controllers/`
-4. **Add business logic** in `src/services/`
-5. **Update the main router** in `src/http/server/http-server.ts`
-
-Example:
+#### **1. Backend Route**
 ```typescript
 // src/http/routes/posts.routes.ts
 import { Router } from 'express';
 import * as postController from '../controllers/post.controller.js';
-import { authenticate } from '../middleware/auth.js';
-import { validate } from '../middleware/validate.js';
-import { createPostSchema } from '../validators/post.js';
 
 const router = Router();
-
 router.get('/', postController.getPosts);
-router.post('/', authenticate, validate(createPostSchema), postController.createPost);
-
 export default router;
 ```
 
+#### **2. Validation Schema**
+```typescript
+// src/http/validators/post.ts
+import { z } from 'zod';
+
+export const createPostSchema = z.object({
+  title: z.string().min(1).max(100),
+  content: z.string().min(1).max(1000),
+});
+```
+
+#### **3. Frontend Component**
+```tsx
+// client/src/components/PostCard.tsx
+import { FeatureCard } from './FeatureCard';
+
+export const PostCard = ({ post }) => (
+  <FeatureCard
+    title={post.title}
+    icon={FileText}
+    theme="blue"
+    features={[
+      { text: post.excerpt, iconColor: "blue" }
+    ]}
+  />
+);
+```
+
+### **Customizing Components**
+
+#### **Creating New Themes**
+```typescript
+// Add to FeatureCard.tsx colorThemes
+newTheme: {
+  border: 'border-indigo-200 dark:border-indigo-800',
+  hoverBorder: 'hover:border-indigo-400 dark:hover:border-indigo-600',
+  shadow: 'hover:shadow-indigo-500/20',
+  // ... other properties
+}
+```
+
+## 🚀 **Performance Optimizations**
+
+### **Backend Optimizations**
+- **Connection Pooling** - Optimized database connection management
+- **Memory Monitoring** - Built-in memory usage tracking and warnings
+- **Request Timeouts** - Configurable timeouts for different route types
+- **Compression** - Gzip compression for all responses
+- **Rate Limiting** - Prevent abuse with Redis-backed limiting
+
+### **Frontend Optimizations**
+- **Code Splitting** - Automatic route-based code splitting
+- **Tree Shaking** - Dead code elimination in production builds
+- **Asset Optimization** - Automatic image and CSS optimization
+- **Lazy Loading** - Dynamic imports for non-critical components
+- **Bundle Analysis** - Built-in bundle size analysis
+
 ## 🤝 Contributing
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+1. **Fork the repository**
+2. **Create a feature branch** (`git checkout -b feature/amazing-feature`)
+3. **Follow the coding standards** (ESLint + Prettier)
+4. **Add tests for new features**
+5. **Commit your changes** (`git commit -m 'Add amazing feature'`)
+6. **Push to the branch** (`git push origin feature/amazing-feature`)
+7. **Open a Pull Request**
+
+### **Code Standards**
+- **TypeScript strict mode** - Full type safety required
+- **ESLint configuration** - Consistent code formatting
+- **Modular architecture** - Clear separation of concerns
+- **Test coverage** - All new features must include tests
 
 ## 📄 License
 
@@ -465,20 +609,23 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🙏 Acknowledgments
 
-- [Express.js](https://expressjs.com/) - Fast, unopinionated web framework
-- [React](https://reactjs.org/) - A JavaScript library for building user interfaces
-- [Drizzle ORM](https://orm.drizzle.team/) - TypeScript ORM for SQL databases
-- [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework
-- [Zod](https://zod.dev/) - TypeScript-first schema validation
+- **[Express.js](https://expressjs.com/)** - Fast, unopinionated web framework
+- **[React](https://reactjs.org/)** - A JavaScript library for building user interfaces  
+- **[Drizzle ORM](https://orm.drizzle.team/)** - TypeScript ORM for SQL databases
+- **[Tailwind CSS](https://tailwindcss.com/)** - Utility-first CSS framework
+- **[Vite](https://vitejs.dev/)** - Next generation frontend tooling
+- **[Zod](https://zod.dev/)** - TypeScript-first schema validation
+- **[Framer Motion](https://www.framer.com/motion/)** - Production-ready motion library
 
 ## 📞 Support
 
-If you have any questions or need help, please:
+If you have any questions or need help:
 
-1. Check the [documentation](#-api-documentation)
-2. Search [existing issues](https://github.com/your-repo/issues)
-3. Create a [new issue](https://github.com/your-repo/issues/new)
+1. **Check the documentation** above
+2. **Search existing issues** on GitHub
+3. **Create a new issue** with detailed information
+4. **Join the community discussions**
 
 ---
 
-**Happy coding! 🚀** 
+**Made with ❤️ for the developer community. Happy coding! 🚀** 
