@@ -49,14 +49,7 @@ export class HttpServerProcess {
    */
   private monitorMemoryAndConnections(app: Application, interval: number = 30000): NodeJS.Timeout {
     return setInterval(() => {
-      import('node:v8').then((v8) => {
-        const heapStats = v8.getHeapStatistics();
-        app.logger.debug('*** In-Monitor Diagnostic ***', {
-          noe: process.env['NODE_OPTIONS'],
-          v8HeapLimitMB: Math.floor(heapStats.heap_size_limit / (1024 * 1024)),
-          currentHeapTotalMB: Math.floor(process.memoryUsage().heapTotal / (1024 * 1024))
-      });
-      })
+      
       const memUsage = process.memoryUsage();
       const heapUsedMB = memUsage.heapUsed / 1024 / 1024;
       const heapTotalMB = memUsage.heapTotal / 1024 / 1024;

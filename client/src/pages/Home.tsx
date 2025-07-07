@@ -34,7 +34,7 @@ export const Home: React.FC = () => {
   return (
     <div ref={containerRef} className="relative overflow-hidden">
       {/* Hero Section with Parallax - Full Width */}
-      <section className="relative h-[60vh] flex items-center justify-center w-full">
+      <section className="relative h-[90vh] md:h-[70vh] lg:h-[60vh] xl:h-[60vh] 2xl:h-[60vh] flex items-center justify-center w-full">
         {/* Animated Background */}
         {/* <AnimatedBackground /> */}
         <FlickeringGrid className='absolute inset-0 overflow-hidden'/>
