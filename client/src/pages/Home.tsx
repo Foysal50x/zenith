@@ -72,14 +72,14 @@ export const Home: React.FC = () => {
               </Link>
             ) : (
               <>
-                <Link to="/register">
-                  <Button size="lg" className="group">
+                <Link to="https://github.com/foysal50x/zenith">
+                  <Button size="lg" className="group cursor-pointer">
                     Get Started
                     <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </Button>
                 </Link>
                 <Link to="/login">
-                  <Button variant="outline" size="lg">
+                  <Button variant="outline" size="lg" className="cursor-pointer">
                     Sign In
                   </Button>
                 </Link>
@@ -205,14 +205,14 @@ export const Home: React.FC = () => {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               {!user && (
                 <>
-                  <Link to="/register">
-                    <Button size="lg" className="group">
+                  <Link to="https://github.com/foysal50x/zenith">
+                    <Button size="lg" className="group cursor-pointer">
                       Get Started Now
                       <ArrowUpRight className="ml-2 w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                     </Button>
                   </Link>
                   <Link to="/login">
-                    <Button variant="outline" size="lg">
+                    <Button variant="outline" size="lg" className="cursor-pointer">
                       Sign In
                     </Button>
                   </Link>

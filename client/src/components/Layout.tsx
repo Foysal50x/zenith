@@ -32,10 +32,10 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
               ) : (
                 <>
                   <Link to="/login">
-                    <Button variant="ghost">Sign In</Button>
+                    <Button variant="ghost" className="cursor-pointer">Sign In</Button>
                   </Link>
                   <Link to="/register">
-                    <Button>Get Started</Button>
+                    <Button className="cursor-pointer">Register</Button>
                   </Link>
                 </>
               )}
