@@ -1,0 +1,153 @@
+services:
+  # PostgreSQL with PostGIS - ARM64 Compatible
+  postgres:
+    image: postgis/postgis:16-3.4-alpine
+    container_name: zenith-postgres
+    restart: unless-stopped
+    platform: linux/amd64  # Force x86_64 emulation for ARM64 compatibility
+    environment:
+      POSTGRES_DB: ${DB_NAME:-zenith_db}
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
+    networks:
+      - zenith-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres} -d ${DB_NAME:-zenith_db}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Alternative ARM64 Native PostgreSQL + PostGIS (uncomment if you prefer native ARM64)
+  # postgres:
+  #   image: postgres:16-alpine
+  #   container_name: zenith-postgres
+  #   restart: unless-stopped
+  #   environment:
+  #     POSTGRES_DB: ${DB_NAME:-zenith_db}
+  #     POSTGRES_USER: ${DB_USER:-postgres}
+  #     POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+  #     POSTGRES_HOST_AUTH_METHOD: trust
+  #   ports:
+  #     - "${DB_PORT:-5432}:5432"
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #     - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
+  #   networks:
+  #     - zenith-network
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres} -d ${DB_NAME:-zenith_db}"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+
+  # Redis Cache & Session Store
+  redis:
+    image: redis:7-alpine
+    container_name: zenith-redis
+    restart: unless-stopped
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis_data:/data
+      - ./config/redis.conf:/usr/local/etc/redis/redis.conf:ro
+    command: redis-server /usr/local/etc/redis/redis.conf
+    networks:
+      - zenith-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Application Service (Development)
+  app-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+      target: development
+    container_name: zenith-app
+    restart: unless-stopped
+    environment:
+      NODE_ENV: development
+      PORT: ${PORT:-8080}
+      DB_URL: postgresql://${DB_USER:-postgres}:${DB_PASSWORD:-postgres}@postgres:5432/${DB_NAME:-zenith_db}
+      REDIS_URL: redis://redis:6379
+      JWT_SECRET: ${JWT_SECRET:-your-super-secret-dev-key}
+    ports:
+      - "${PORT:-8080}:8080"
+      - "5173:5173"  # Vite dev server
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/frontend/node_modules
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - zenith-network
+    profiles:
+      - dev
+
+  # Application Service (Production)
+  # app-prod:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #     target: production
+  #   container_name: zenith-app
+  #   restart: unless-stopped
+  #   environment:
+  #     NODE_ENV: production
+  #     PORT: ${PORT:-8080}
+  #     DB_URL: postgresql://${DB_USER:-postgres}:${DB_PASSWORD:-postgres}@postgres:5432/${DB_NAME:-zenith_db}
+  #     REDIS_URL: redis://redis:6379
+  #     JWT_SECRET: ${JWT_SECRET}
+  #   ports:
+  #     - "${PORT:-8080}:8080"
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+  #     redis:
+  #       condition: service_healthy
+  #   networks:
+  #     - zenith-network
+  #   profiles:
+  #     - prod
+
+  # Drizzle Studio - Web-based DB Browser
+  drizzle-studio:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+      target: development
+    container_name: zenith-drizzle-studio
+    environment:
+      DB_URL: postgresql://${DB_USER:-postgres}:${DB_PASSWORD:-postgres}@postgres:5432/${DB_NAME:-zenith_db}
+    ports:
+      - "4983:4983"
+    command: npm run drizzle:studio -- --host 0.0.0.0 --port 4983
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - zenith-network
+    profiles:
+      - tools
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  zenith-network:
+    driver: bridge 

@@ -39,13 +39,14 @@ A modern, modular, and scalable fullstack project template built with Node.js, R
 ### 🔥 **Backend Architecture**
 - **Node.js + Express.js** - High-performance server with modular architecture
 - **TypeScript** - Strict type safety with subpath imports (`#core/*`, `#config/*`)
-- **Drizzle ORM** - Type-safe database queries with PostgreSQL
+- **Drizzle ORM** - Type-safe database queries with PostgreSQL + PostGIS
 - **Redis Integration** - Caching, session management, and rate limiting
 - **JWT Authentication** - Secure token-based authentication system
 - **Advanced Rate Limiting** - Redis-backed, customizable rate limiting
 - **Zod Validation** - Runtime schema validation for all inputs
 - **Helmet Security** - Comprehensive security headers and CSP
 - **Winston Logging** - Structured logging with multiple transports
+- **URL Encoding Utilities** - Safe handling of special characters in passwords and URLs
 - **Graceful Shutdown** - Proper cleanup and connection management
 - **Application Lifecycle** - Event-driven application management with hooks
 
@@ -115,9 +116,10 @@ zenith/
 │   ├── utils/                   # Utility functions
 │   │   ├── errors.ts            # Custom error classes
 │   │   ├── helpers.ts           # Helper functions
+│   │   ├── url-encoder.ts       # URL encoding for passwords and connections
 │   │   └── logger.ts            # Winston logger configuration
 │   └── main.ts                  # Application entry point
-├── client/                      # React frontend
+├── frontend/                    # React frontend
 │   ├── src/
 │   │   ├── components/          # Reusable React components
 │   │   │   ├── ui/              # Base UI components
@@ -157,10 +159,15 @@ zenith/
 
 ## 🛠️ Prerequisites
 
+### **Local Development**
 - **Node.js** (v20 or higher)
-- **PostgreSQL** (v14 or higher)
+- **PostgreSQL + PostGIS** (v14 or higher)
 - **Redis** (v6 or higher)
-- **npm** or **yarn**
+- **npm** (package manager)
+
+### **Docker Development**
+- **Docker** (v20 or higher)
+- **Docker Compose** (v2.0 or higher)
 
 ## ⚡ Quick Start
 
@@ -203,6 +210,165 @@ The application will be available at:
 - **Frontend**: http://localhost:5173 (Vite dev server)
 - **Backend API**: http://localhost:8080 (Express server)
 - **Health Check**: http://localhost:8080/health
+
+## 🐳 Docker Quick Start
+
+### **🚀 One-Command Setup**
+```bash
+# Clone and start everything with Docker
+git clone <repository-url>
+cd zenith
+
+# Copy environment file
+cp .env.example .env
+
+# Start PostgreSQL + Redis + Application (Development)
+npm run docker:up:dev
+```
+
+### **📦 Docker Services**
+
+The Docker Compose setup includes:
+
+- **PostgreSQL + PostGIS** - Primary database with spatial support and auto-initialization
+- **Redis 7** - Caching, sessions, and rate limiting
+- **Application** - Your Node.js backend + React frontend
+- **Drizzle Studio** - Web-based database browser and manager
+- **Migration Service** - Database migration runner
+
+### **🔧 Docker Commands**
+
+```bash
+# Database + Cache Only (for local development)
+npm run docker:db              # Start only PostgreSQL and Redis
+
+# Full Application Stack
+npm run docker:up:dev          # Development mode with hot reload
+npm run docker:up:prod         # Production mode
+npm run docker:up              # All services (no app)
+
+# Management
+npm run docker:down            # Stop all services
+npm run docker:down:volumes    # Stop and remove volumes
+npm run docker:logs            # View all logs
+npm run docker:shell           # Access dev container shell
+
+# Database Operations
+npm run docker:migrate         # Run migrations in container
+npm run docker:studio          # Start Drizzle Studio in container
+
+# Maintenance
+npm run docker:restart         # Restart all services
+npm run docker:clean           # Complete cleanup (remove everything)
+```
+
+### **📁 Docker Environment Variables**
+
+Your `.env` file works with Docker automatically. Key Docker-specific variables:
+
+```env
+# Database Connection (automatic in Docker)
+DB_URL=postgresql://postgres:postgres@postgres:5432/zenith_db
+
+# Redis Connection (automatic in Docker)
+REDIS_URL=redis://redis:6379
+
+# Container Ports
+PORT=8080                      # Application port
+DB_PORT=5432                   # PostgreSQL port  
+REDIS_PORT=6379                # Redis port
+
+# Database Settings
+DB_NAME=zenith_db
+DB_USER=postgres
+DB_PASSWORD=postgres
+```
+
+### **🏗️ Docker Architecture**
+
+```
+Docker Network: zenith-network
+├── postgres (PostgreSQL + PostGIS) → localhost:5432
+├── redis (Redis 7)              → localhost:6379
+├── app-dev (Development)        → localhost:8080, localhost:5173
+├── app-prod (Production)        → localhost:8080
+├── drizzle-studio (DB Browser)  → localhost:4983
+└── migrate (Migration Runner)   → Runs and exits
+```
+
+### **🔄 Development Workflow with Docker**
+
+```bash
+# 1. Start database services
+npm run docker:db
+
+# 2. Run app locally (hybrid approach)
+npm run dev
+
+# OR run everything in containers
+npm run docker:up:dev
+
+# 3. Make changes - hot reload works in both approaches
+
+# 4. Run migrations
+npm run docker:migrate
+
+# 5. Access container shell for debugging
+npm run docker:shell
+```
+
+### **🚀 Production Deployment with Docker**
+
+```bash
+# Build production images
+npm run docker:build
+
+# Start production stack
+npm run docker:up:prod
+
+# Or use individual docker-compose commands
+docker-compose --profile prod up -d
+```
+
+### **💾 Data Persistence**
+
+Docker volumes ensure your data persists:
+- `postgres_data` - Database files
+- `redis_data` - Redis persistence
+
+To reset all data:
+```bash
+npm run docker:down:volumes
+```
+
+### **🔍 Health Checks**
+
+All services include health checks:
+- **PostgreSQL**: `pg_isready` command
+- **Redis**: `redis-cli ping` command  
+- **Application**: HTTP health endpoint (`/health`)
+
+Check service health:
+```bash
+docker-compose ps
+```
+
+### **📊 Monitoring Containers**
+
+```bash
+# View logs
+npm run docker:logs                    # All services
+docker-compose logs -f postgres        # PostgreSQL only
+docker-compose logs -f redis           # Redis only
+docker-compose logs -f app-dev         # Application only
+
+# Resource usage
+docker stats
+
+# Container inspection
+docker-compose exec postgres psql -U postgres -d zenith_db
+docker-compose exec redis redis-cli
+```
 
 ## 🔧 Configuration
 
@@ -289,21 +455,30 @@ npm run preview         # Build and test production locally
 - **Static Serving**: Automatic in production mode
 
 ### **Docker Deployment**
-```dockerfile
-FROM node:18-alpine
-WORKDIR /app
 
-# Install dependencies
-COPY package*.json ./
-RUN npm ci --only=production
+The project includes comprehensive Docker support with multi-stage builds:
 
-# Copy built application
-COPY dist ./dist
-COPY public/dist ./public/dist
+```bash
+# Development with hot reload
+npm run docker:up:dev
 
-EXPOSE 8080
-CMD ["npm", "start"]
+# Production deployment
+npm run docker:build
+npm run docker:up:prod
 ```
+
+**Multi-stage Dockerfile features:**
+- **Development**: Node.js with dev dependencies, volume mounting, hot reload
+- **Production**: Optimized Alpine image, non-root user, health checks
+- **Security**: dumb-init for signal handling, minimal attack surface
+- **Performance**: Multi-layer caching, optimized dependency installation
+
+**Docker Compose includes:**
+- PostgreSQL 16 with automatic initialization
+- Redis 7 with optimized configuration  
+- Application services (dev/prod profiles)
+- Health checks and automatic restarts
+- Data persistence with named volumes
 
 ## 📚 API Documentation
 
@@ -488,6 +663,37 @@ curl http://localhost:8080/health
 - **SQL Injection Prevention** - Drizzle ORM with parameterized queries
 - **XSS Protection** - Content Security Policy and input sanitization
 
+## 🗺️ **Spatial Database Features (PostGIS)**
+
+The project includes full PostGIS support for advanced spatial data operations:
+
+### **Spatial Data Types**
+- **Points, Lines, Polygons** - Store geographic coordinates and shapes
+- **Multi-geometries** - Complex spatial collections
+- **3D Geometries** - Height and elevation support
+
+### **Spatial Operations**
+- **Distance Calculations** - Find nearby locations within radius
+- **Spatial Relationships** - Check if geometries intersect, contain, or overlap
+- **Coordinate Transformations** - Convert between different coordinate systems
+- **Geocoding** - Address to coordinates conversion (with TIGER data)
+
+### **Example Usage**
+```typescript
+// Store location with coordinates
+const location = {
+  name: 'Office',
+  coordinates: 'POINT(-122.4194 37.7749)', // San Francisco
+  serviceArea: 'POLYGON(...)'  // Coverage area
+};
+
+// Find nearby locations (within 1km)
+const nearby = await db
+  .select()
+  .from(locations)
+  .where(sql`ST_DWithin(coordinates, ST_GeomFromText('POINT(-122.4194 37.7749)', 4326), 1000)`);
+```
+
 ## 🛠️ **Development Tools**
 
 ### **Available Scripts**
@@ -512,13 +718,24 @@ npm run typecheck       # TypeScript type checking
 
 # Database
 npm run migrate         # Apply database migrations
-npm run migrate:generate # Generate new migration
-npm run migrate:studio  # Open Drizzle Studio (GUI)
+npm run drizzle:generate # Generate new migration
+npm run drizzle:studio  # Open Drizzle Studio (GUI)
 
 # Environment
 npm run setup:env:dev   # Setup development environment
 npm run setup:env:prod  # Setup production environment
 npm run setup:env:test  # Setup testing environment
+
+# Docker (Containerization)
+npm run docker:build        # Build Docker images
+npm run docker:up:dev       # Start development stack
+npm run docker:up:prod      # Start production stack  
+npm run docker:db           # Start database services only
+npm run docker:down         # Stop all containers
+npm run docker:migrate      # Run database migrations
+npm run docker:logs         # View container logs
+npm run docker:shell        # Access development container
+npm run docker:clean        # Complete cleanup
 ```
 
 ### **Adding New Features**
@@ -574,6 +791,31 @@ newTheme: {
   // ... other properties
 }
 ```
+
+## 🔧 **URL Encoding & Database Connections**
+
+### **Safe Password Handling**
+The project includes comprehensive utilities for handling special characters in passwords and database connection strings:
+
+```typescript
+import { encodePassword, buildPostgresUrl } from '#utils/url-encoder.js';
+
+// Safely encode passwords with special characters
+const encodedPassword = encodePassword('my@password:123');
+// Result: "my%40password%3A123"
+
+// Build database URLs with automatic encoding
+const dbUrl = buildPostgresUrl({
+  username: 'user',
+  password: 'my@password:123', // Contains @ and :
+  host: 'localhost',
+  port: 5432,
+  database: 'zenith_db'
+});
+// Result: "postgresql://user:my%40password%3A123@localhost:5432/zenith_db"
+```
+
+**Supports**: PostgreSQL, Redis, and custom connection strings with automatic URL encoding for all special characters.
 
 ## 🚀 **Performance Optimizations**
 
