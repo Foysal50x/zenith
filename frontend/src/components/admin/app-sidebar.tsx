@@ -17,10 +17,10 @@ import {
   IconUsers,
 } from "@tabler/icons-react"
 
-import { NavDocuments } from "@/components/nav-documents"
-import { NavMain } from "@/components/nav-main"
-import { NavSecondary } from "@/components/nav-secondary"
-import { NavUser } from "@/components/nav-user"
+import { NavDocuments } from "@/components/admin/nav-documents"
+import { NavMain } from "@/components/admin/nav-main"
+import { NavSecondary } from "@/components/admin/nav-secondary"
+import { NavUser } from "@/components/admin/nav-user"
 import {
   Sidebar,
   SidebarContent,
@@ -160,7 +160,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             >
               <a href="#">
                 <IconInnerShadowTop className="!size-5" />
-                <span className="text-base font-semibold">Acme Inc.</span>
+                <span className="text-base font-semibold">Admin Panel</span>
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>
