@@ -47,9 +47,9 @@ export const Register: React.FC = () => {
 
   return (
     <div className="max-w-md mx-auto">
-      <div className="text-center mb-8">
-        <h1 className="text-2xl font-bold text-foreground">Create an account</h1>
-        <p className="text-muted-foreground mt-2">
+      <div className="text-center mb-7">
+        <h1 className="text-2xl font-bold text-foreground pt-6">Create an account</h1>
+        <p className="text-muted-foreground mt-1">
           Sign up to get started with your account
         </p>
       </div>
@@ -138,4 +138,4 @@ export const Register: React.FC = () => {
       </div>
     </div>
   );
-}; 
+};

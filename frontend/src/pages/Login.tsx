@@ -42,9 +42,9 @@ export const Login: React.FC = () => {
 
   return (
     <div className="max-w-md mx-auto">
-      <div className="text-center mb-8">
-        <h1 className="text-2xl font-bold text-foreground">Welcome back</h1>
-        <p className="text-muted-foreground mt-2">
+      <div className="text-center mb-7">
+        <h1 className="text-2xl font-bold text-foreground pt-6">Welcome back</h1>
+        <p className="text-muted-foreground mt-1">
           Sign in to your account to continue
         </p>
       </div>
