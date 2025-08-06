@@ -10,10 +10,30 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import crypto from 'crypto';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const projectRoot = path.resolve(__dirname, '..');
+
+/**
+ * Generates a cryptographically secure random secret key
+ * @param {number} length - Length of the secret key (default: 64)
+ * @param {string} encoding - Encoding format (default: 'hex')
+ * @returns {string} Generated secret key
+ */
+function generateSecretKey(length = 64, encoding = 'hex') {
+  return crypto.randomBytes(length).toString(encoding);
+}
+
+/**
+ * Generates a secure JWT secret with proper length
+ * @returns {string} JWT secret key
+ */
+function generateJWTSecret() {
+  // JWT secrets should be at least 32 characters, we'll use 64 for extra security
+  return generateSecretKey(32, 'base64');
+}
 
 // Default configuration
 const defaultConfig = {
@@ -21,9 +41,9 @@ const defaultConfig = {
   PORT: 8080,
   HOST: '0.0.0.0',
   DB: 'postgres',
-  DB_URL: 'postgresql://username:password@localhost:5432/database_name',
+  DB_URL: 'postgresql://postgres:postgres@localhost:5432/zenith_db',
   REDIS_URL: 'redis://localhost:6379',
-  JWT_SECRET: 'your-super-secret-jwt-key-minimum-32-characters-long',
+  JWT_SECRET: generateJWTSecret(),
   JWT_EXPIRES_IN: '7d',
   RATE_LIMIT_WINDOW_MS: 60000,
   RATE_LIMIT_MAX_REQUESTS: 100,
