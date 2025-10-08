@@ -42,6 +42,6 @@
     "tailwindcss": "^4.0.0-alpha.4",
     "tw-animate-css": "^1.3.5",
     "typescript": "^5.3.3",
-    "vite": "^7.0.4"
+    "vite": "^7.1.9"
   }
 }
